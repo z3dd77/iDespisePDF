@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowLeft, CircleDot, ShieldCheck, TriangleAlert } from "lucide-react";
 
 import { StatusPill } from "@/components/status-pill";
+import { linkPrefetch } from "@/lib/runtime";
 import type { ToolDefinition } from "@/lib/tools";
 
 export function ToolPlaceholder({ tool }: { tool: ToolDefinition }) {
@@ -11,6 +12,7 @@ export function ToolPlaceholder({ tool }: { tool: ToolDefinition }) {
     <article className="mx-auto w-full max-w-3xl px-4 py-12 sm:px-6 lg:px-8">
       <Link
         href="/#tools"
+        prefetch={linkPrefetch}
         className="inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm font-medium text-ink-muted transition hover:text-ink"
       >
         <ArrowLeft aria-hidden="true" className="size-4" />

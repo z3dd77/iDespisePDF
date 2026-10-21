@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 
 import { StatusPill } from "@/components/status-pill";
+import { linkPrefetch } from "@/lib/runtime";
 import type { ToolDefinition } from "@/lib/tools";
 
 export function ToolCard({ tool }: { tool: ToolDefinition }) {
@@ -12,6 +13,7 @@ export function ToolCard({ tool }: { tool: ToolDefinition }) {
     <li className="h-full">
       <Link
         href={`/tools/${tool.slug}`}
+        prefetch={linkPrefetch}
         className="group flex h-full flex-col gap-5 rounded-card border border-white/70 bg-surface p-6 shadow-raised transition duration-300 ease-out hover:-translate-y-1 hover:shadow-raised-lg focus-visible:-translate-y-1 focus-visible:shadow-raised-lg"
       >
         <div className="flex items-start justify-between gap-3">

@@ -1,0 +1,36 @@
+appId: com.z3dd77.idespise
+productName: iDespisePDF
+copyright: Copyright © 2026 iDespisePDF
+
+directories:
+  output: release
+  buildResources: resources
+
+# The renderer is a complete static export, so no node_modules are shipped.
+files:
+  - out/**/*
+  - electron/**/*
+  - package.json
+  - "!node_modules/**/*"
+  - "!**/*.map"
+
+asar: false
+npmRebuild: false
+electronLanguages:
+  - en-US
+
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+  icon: resources/icon.png
+
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: iDespisePDF
+  artifactName: iDespisePDF-Setup-${version}.${ext}

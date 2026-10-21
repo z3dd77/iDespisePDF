@@ -14,6 +14,9 @@
 # production
 /build
 
+# desktop packaging
+/release/
+
 # misc
 .DS_Store
 Thumbs.db

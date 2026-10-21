@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { ArrowRight, ShieldCheck, UploadCloud } from "lucide-react";
 
+import { linkPrefetch } from "@/lib/runtime";
+
 /**
  * Landing-page intake illustration. The real intake lives on each tool page,
  * which is why this is a link rather than a file input.
@@ -29,6 +31,7 @@ export function DropZonePreview() {
           <div className="mt-6 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
             <Link
               href="#tools"
+              prefetch={linkPrefetch}
               className="inline-flex items-center justify-center gap-2 rounded-full bg-surface px-5 py-2.5 text-sm font-semibold text-accent-strong shadow-raised-sm transition hover:shadow-raised"
             >
               Choose a tool
@@ -36,6 +39,7 @@ export function DropZonePreview() {
             </Link>
             <Link
               href="#privacy"
+              prefetch={linkPrefetch}
               className="inline-flex items-center justify-center rounded-full px-4 py-2.5 text-sm font-semibold text-ink-muted underline decoration-line decoration-2 underline-offset-4 transition hover:text-ink"
             >
               How files stay local

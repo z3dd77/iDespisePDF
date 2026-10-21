@@ -1,6 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
 
+import { linkPrefetch } from "@/lib/runtime";
+
 export function SiteFooter() {
   return (
     <footer className="mt-20 border-t border-white/60 bg-base-deep/40">
@@ -24,18 +26,21 @@ export function SiteFooter() {
           <nav aria-label="Footer" className="flex flex-wrap gap-x-5 gap-y-2">
             <Link
               href="/#tools"
+              prefetch={linkPrefetch}
               className="rounded text-sm text-ink-muted underline-offset-4 hover:text-ink hover:underline"
             >
               Tools
             </Link>
             <Link
               href="/#status"
+              prefetch={linkPrefetch}
               className="rounded text-sm text-ink-muted underline-offset-4 hover:text-ink hover:underline"
             >
               Build status
             </Link>
             <Link
               href="/#privacy"
+              prefetch={linkPrefetch}
               className="rounded text-sm text-ink-muted underline-offset-4 hover:text-ink hover:underline"
             >
               Privacy

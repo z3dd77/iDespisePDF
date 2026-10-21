@@ -2,6 +2,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 
+import { linkPrefetch } from "@/lib/runtime";
+
 const NAV_LINKS = [
   { href: "/#tools", label: "Tools" },
   { href: "/#status", label: "Build status" },
@@ -14,6 +16,7 @@ export function SiteHeader() {
       <div className="mx-auto flex h-20 w-full max-w-6xl items-center justify-between gap-4 px-4 sm:h-28 sm:px-6 lg:px-8">
         <Link
           href="/"
+          prefetch={linkPrefetch}
           className="flex items-center rounded-control"
           aria-label="iDespisePDF home"
         >
@@ -32,6 +35,7 @@ export function SiteHeader() {
             <Link
               key={link.href}
               href={link.href}
+              prefetch={linkPrefetch}
               className="rounded-full px-3 py-2 text-sm font-medium text-ink-muted transition hover:bg-surface hover:text-ink hover:shadow-raised-xs"
             >
               {link.label}
@@ -41,6 +45,7 @@ export function SiteHeader() {
 
         <Link
           href="/#tools"
+          prefetch={linkPrefetch}
           className="inline-flex items-center gap-1.5 rounded-full border border-white/70 bg-surface px-4 py-2 text-sm font-semibold text-accent-strong shadow-raised-sm transition hover:shadow-raised"
         >
           Open tools

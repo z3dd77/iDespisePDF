@@ -17,6 +17,8 @@ const eslintConfig = defineConfig([
     // Test artifacts.
     ".vitest/**",
     "coverage/**",
+    // electron-builder output.
+    "release/**",
   ]),
 ]);
 

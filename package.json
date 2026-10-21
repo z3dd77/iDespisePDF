@@ -1,8 +1,10 @@
 {
   "name": "idespise-pdf",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "private": true,
   "description": "Local-first PDF utilities. Files are processed in your browser and never uploaded.",
+  "author": "z3dd77",
+  "main": "electron/main.mjs",
   "scripts": {
     "predev": "node scripts/sync-pdf-assets.mjs",
     "dev": "next dev",
@@ -16,7 +18,11 @@
     "test:unit": "vitest run --project unit",
     "test:browser": "vitest run --project browser",
     "smoke": "node scripts/smoke.mjs",
-    "ui-smoke": "node scripts/ui-smoke.mjs"
+    "ui-smoke": "node scripts/ui-smoke.mjs",
+    "build:static": "node scripts/build-static.mjs",
+    "electron:start": "node scripts/ensure-electron.mjs && electron .",
+    "electron:smoke": "node scripts/ensure-electron.mjs && node scripts/electron-smoke.mjs",
+    "dist:win": "node scripts/ensure-electron.mjs && npm run build:static && electron-builder --win nsis"
   },
   "dependencies": {
     "@cantoo/pdf-lib": "^2.11.1",
@@ -33,6 +39,8 @@
     "@types/react-dom": "^19",
     "@vitest/browser": "^5.0.5",
     "@vitest/browser-playwright": "^5.0.5",
+    "electron": "^45.0.0",
+    "electron-builder": "^26.15.3",
     "eslint": "^9",
     "eslint-config-next": "16.4.2",
     "playwright": "^1.64.1",

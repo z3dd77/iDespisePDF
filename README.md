@@ -1,13 +1,13 @@
 # iDespisePDF
 
-Local-first PDF utilities. Files are opened, processed, and downloaded in the
-browser. There is no upload endpoint, no account, and no server-side document
-storage.
+Local-first PDF utilities. Files are opened, processed, and downloaded on your
+own device. There is no upload endpoint, no account, and no server-side document
+storage. The same web build also ships as a Windows desktop app (Electron).
 
-**Status: all nine tools are implemented.** Each tool has its own page, its own
-stated limits, and real processing behind it. Compression and protection are the
-two tools with quality or security caveats, and both state those caveats in the
-UI before they run.
+**Status: all nine tools are implemented.** The desktop app wraps the same
+static export. Each tool has its own page, its own stated limits, and real
+processing behind it. Compression and protection are the two tools with quality
+or security caveats, and both state those caveats in the UI before they run.
 
 ## Stack
 
@@ -20,6 +20,7 @@ UI before they run.
 | PDF engine | `@cantoo/pdf-lib` 2.11.1 (MIT) — pdf-lib API plus encryption |
 | Rendering | `pdfjs-dist` 6.4.299 with its worker served from `public/` |
 | Tests | Vitest 5 (node project + Chromium browser project via Playwright) |
+| Windows app | Electron 45 + electron-builder (NSIS installer) |
 
 `@cantoo/pdf-lib` is used instead of upstream `pdf-lib@1.17.1` because upstream
 cannot open encrypted files or add encryption.
@@ -37,6 +38,10 @@ npm run build        # sync worker, then production build
 npm start            # serve the production build
 npm run smoke        # route smoke test against a running server
 npm run ui-smoke     # end-to-end UI test in Chromium against a running server
+npm run build:static # static export in out/ for the Electron shell
+npm run electron:start # launch the Electron shell on the static export
+npm run electron:smoke # Electron end-to-end check (protocol, worker, download)
+npm run dist:win     # build release/iDespisePDF-Setup-<version>.exe
 ```
 
 `scripts/sync-pdf-assets.mjs` copies `pdf.worker.min.mjs` from `node_modules`
@@ -68,6 +73,10 @@ lib/
   format.ts               Byte and count formatting
   cn.ts                   Class name join
   pdf/                    Processing boundary: no React, no network
+electron/
+  main.mjs                app:// protocol, secure window, download handling
+resources/icon.png        Square app icon derived from the logo
+.github/workflows/        Tag-triggered Windows release build
 ```
 
 Tool UI kit (`components/tools/`): `tool-shell`, `file-drop-zone`, `file-list`,
@@ -134,6 +143,10 @@ The original file is never overwritten.
   files, clicks the real buttons, downloads the output, and parses it back. It
   requires `npm start`, a Chromium install, and checks 22 outcomes, including
   the header/footer logo, cover size, and preview thumbnails.
+- `scripts/electron-smoke.mjs` does the same for the desktop shell: app:// load,
+  client routing, a PDF.js cover, merge, and a file actually written to disk.
+  Downloads are redirected to a temp directory so the real Downloads folder is
+  untouched.
 
 ## Previews
 
@@ -142,6 +155,23 @@ The original file is never overwritten.
 - Split, rotate, reorder, extract, and PDF to images render full page grids.
 - Compress and protect show a single cover; images to PDF shows the actual
   image previews from local object URLs, revoked when a file is removed.
+
+## Windows desktop app
+
+- `npm run build:static` produces `out/`; Electron serves it over `app://` so
+  Next.js routing and the PDF.js worker behave as they do on the web.
+- `npm run dist:win` builds `release/iDespisePDF-Setup-<version>.exe` (NSIS,
+  x64, per-user install, no admin prompt).
+- Downloads go to the user's Downloads folder, with `(1)`, `(2)` suffixes
+  instead of overwriting an existing file.
+- Releases are published by `.github/workflows/release.yml` when a `v*` tag is
+  pushed. Each release also includes `SHA256SUMS.txt`.
+- The installer is not code-signed, so Windows SmartScreen shows an unknown
+  publisher warning.
+- `npm run electron:smoke` launches the window, checks the custom protocol, the
+  PDF.js worker, client routing, and a real merge plus download. Set
+  `IDESPISE_EXECUTABLE` to the packaged `iDespisePDF.exe` to test the packaged
+  build instead of the dev binary.
 
 ## Known limitations
 
