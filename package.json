@@ -22,7 +22,7 @@
     "build:static": "node scripts/build-static.mjs",
     "electron:start": "node scripts/ensure-electron.mjs && electron .",
     "electron:smoke": "node scripts/ensure-electron.mjs && node scripts/electron-smoke.mjs",
-    "dist:win": "node scripts/ensure-electron.mjs && npm run build:static && electron-builder --win nsis"
+    "dist:win": "node scripts/ensure-electron.mjs && npm run build:static && electron-builder --win nsis --publish never"
   },
   "dependencies": {
     "@cantoo/pdf-lib": "^2.11.1",
