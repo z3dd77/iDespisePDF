@@ -1,0 +1,100 @@
+@import "tailwindcss";
+
+@theme {
+  /* Surface palette: muted blue-grey, low chroma, light source top-left. */
+  --color-base: #e7ecf3;
+  --color-base-deep: #dde5ef;
+  --color-surface: #edf1f7;
+  --color-sunken: #e0e8f1;
+
+  /* Ink */
+  --color-ink: #1b2634;
+  --color-ink-muted: #4f5c6c;
+  --color-ink-faint: #63707f;
+
+  /* Accent */
+  --color-accent: #35649b;
+  --color-accent-strong: #24476f;
+  --color-accent-soft: #d8e4f3;
+  --color-focus: #12406e;
+
+  /* Status */
+  --color-planned-ink: #774f0d;
+  --color-planned-bg: #f3e7cd;
+  --color-ready-ink: #1d5c40;
+  --color-ready-bg: #d8ebdf;
+
+  /* Structural line: neumorphism needs a real edge for contrast and focus. */
+  --color-line: #c9d4e2;
+
+  /* Elevation */
+  --shadow-raised-xs: 2px 2px 4px #c7d2e0, -2px -2px 4px #ffffff;
+  --shadow-raised-sm: 4px 4px 9px #c6d1df, -4px -4px 9px #ffffff;
+  --shadow-raised: 8px 8px 18px #c4cfde, -8px -8px 18px #ffffff;
+  --shadow-raised-lg: 14px 14px 30px #bccada, -14px -14px 30px #ffffff;
+  --shadow-inset-sm: inset 2px 2px 4px #c4cfde, inset -2px -2px 4px #ffffff;
+  --shadow-inset: inset 5px 5px 11px #c2cddd, inset -5px -5px 11px #ffffff;
+
+  /* Shape */
+  --radius-card: 1.5rem;
+  --radius-control: 0.875rem;
+  --radius-well: 1.25rem;
+
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+    "Liberation Mono", monospace;
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-base);
+    background-image:
+      radial-gradient(1100px 620px at 12% -12%, #f4f8fd 0%, transparent 62%),
+      radial-gradient(900px 560px at 92% -4%, #dae4f0 0%, transparent 58%);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background-color: var(--color-accent-soft);
+    color: var(--color-ink);
+  }
+
+  /* Always-visible keyboard affordance, independent of shadow elevation. */
+  :focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 3px;
+  }
+
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
