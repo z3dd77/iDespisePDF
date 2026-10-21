@@ -37,7 +37,7 @@ const PRIVACY_POINTS = [
   },
   {
     title: "No analytics",
-    body: "No tracking scripts, no session recording, no third-party tags. The only network requests are for the app's own assets.",
+    body: "No tracking scripts, no session recording, no third-party tags. The web build only requests its own assets; the optional desktop update check contacts GitHub Releases for version and changelog data.",
   },
 ];
 

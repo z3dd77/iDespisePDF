@@ -97,6 +97,54 @@ try {
   await page.waitForURL(/\/tools\/merge\/?$/);
   check(page.url().includes("/tools/merge"), "client-side routing reaches the merge tool");
 
+  const packageJson = JSON.parse(
+    await readFile(join(process.cwd(), "package.json"), "utf8"),
+  );
+  const bridge = await page.evaluate(() => {
+    const desktop = window.idespiseDesktop;
+    return desktop
+      ? {
+          platform: desktop.platform,
+          hasUpdates: typeof desktop.updates?.getState === "function",
+        }
+      : null;
+  });
+  check(bridge?.hasUpdates === true, "preload exposes the desktop update bridge");
+  check(
+    typeof bridge?.platform === "string",
+    `preload reports the platform (${bridge?.platform})`,
+  );
+
+  const updateState = await page.evaluate(() =>
+    window.idespiseDesktop?.updates.getState(),
+  );
+  check(
+    updateState?.currentVersion === packageJson.version,
+    `update state reports v${updateState?.currentVersion}`,
+  );
+  check(
+    typeof updateState?.supported === "boolean",
+    "update state reports whether updates are supported",
+  );
+
+  await page
+    .getByRole("button", { name: /Check for updates|Update ready|Downloading update/ })
+    .waitFor();
+  check(true, "footer exposes the update control");
+
+  if (!process.env.IDESPISE_EXECUTABLE) {
+    await page.getByRole("button", { name: "Check for updates" }).click();
+    await page.getByRole("dialog").waitFor();
+    check(
+      await page
+        .getByText(/installed Windows app/i)
+        .isVisible(),
+      "dev build explains that updates run in the installed app",
+    );
+    await page.getByRole("button", { name: "Close update dialog" }).click();
+    await page.getByRole("dialog").waitFor({ state: "hidden" });
+  }
+
   await page.setInputFiles('input[type="file"]', [pdfPath, secondPath]);
   await page.getByText("electron-a.pdf", { exact: true }).waitFor();
   await page.getByRole("img", { name: "Preview of electron-a.pdf" }).waitFor();

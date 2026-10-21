@@ -47,12 +47,17 @@ export async function pdfToImages(
 
     const quality = options.quality ?? JPEG_QUALITY;
     const files: ProcessedFile[] = [];
+    let reducedPages = 0;
     const digits = String(selected[selected.length - 1]).length;
 
     for (const [index, pageNumber] of selected.entries()) {
       const rendered = await renderPageToCanvas(doc, pageNumber, options.scale);
       const blob = await canvasToBlob(rendered.canvas, options.format, quality);
       releaseCanvas(rendered.canvas);
+
+      if (rendered.scaledDown) {
+        reducedPages += 1;
+      }
 
       files.push({
         fileName: `page-${String(pageNumber).padStart(digits, "0")}.${
@@ -72,6 +77,13 @@ export async function pdfToImages(
         `Rendered ${files.length} ${files.length === 1 ? "page" : "pages"} at ${Math.round(
           options.scale * 72,
         )} dpi as ${options.format === "png" ? "PNG" : "JPEG"}.`,
+        ...(reducedPages > 0
+          ? [
+              `${reducedPages} ${
+                reducedPages === 1 ? "large page was" : "large pages were"
+              } rendered below the requested resolution to stay within browser canvas limits.`,
+            ]
+          : []),
         "Images are raster output: text in them is no longer selectable.",
         files.length > 1
           ? "Multiple downloads are triggered one at a time. Your browser may ask permission for multiple files."

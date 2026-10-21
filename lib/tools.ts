@@ -80,11 +80,11 @@ export const TOOLS: readonly ToolDefinition[] = [
     icon: Minimize2,
     status: "available",
     caveat:
-      "Compression works by re-rendering every page as an image. Selectable text, links, annotations, form fields, bookmarks, and accessibility data do not survive. If the rebuilt file is not smaller, no file is produced and the original is left untouched.",
+      "Compression works by re-rendering every page as an image. Selectable text, links, annotations, form fields, bookmarks, and accessibility data do not survive. If a rebuilt file is not smaller, no file is produced for it and the original is left untouched.",
     capabilities: [
-      "Choose a resolution and quality preset",
-      "See the measured size before and after",
-      "Get no file instead of a larger one",
+      "Compress one or more PDFs with the same preset",
+      "See the measured size before and after for each result",
+      "Get no file instead of a larger one, with skipped files named and explained",
     ],
   },
   {

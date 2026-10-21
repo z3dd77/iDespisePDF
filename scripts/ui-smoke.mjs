@@ -106,6 +106,15 @@ try {
     .first()
     .evaluate((image) => image.complete && image.naturalWidth > 0);
   check(headerLogoLoaded, "header logo image actually loads");
+  const updateControlCount = await page
+    .getByRole("button", {
+      name: /Check for updates|Update ready|Downloading update/,
+    })
+    .count();
+  check(
+    updateControlCount === 0,
+    "browser build does not show desktop update controls",
+  );
   await page.setInputFiles('input[type="file"]', [
     await makePdf("merge", "a.pdf", [
       [200, 300],
@@ -275,6 +284,23 @@ try {
   check(
     compressDownloadButtons === 0,
     "compression offers no download when the result is not smaller",
+  );
+
+  // 8b. Compress two files in one run
+  await page.setInputFiles('input[type="file"]', [
+    await makePdf("compress", "b.pdf", [[220, 320]]),
+  ]);
+  await page.getByRole("img", { name: "Preview of b.pdf" }).waitFor();
+  await page.getByRole("button", { name: "Compress 2 PDFs" }).click();
+  await page
+    .getByRole("heading", { name: "No smaller files were produced" })
+    .waitFor({ timeout: 60_000 });
+  const batchDownloadButtons = await page
+    .getByRole("button", { name: "Download", exact: true })
+    .count();
+  check(
+    batchDownloadButtons === 0,
+    "multi-file compression offers no downloads when nothing shrinks",
   );
 
   // 9. Protect, then verify the download with the library

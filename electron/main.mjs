@@ -1,7 +1,11 @@
 import { app, BrowserWindow, Menu, net, protocol, session, shell } from "electron";
 import { existsSync, statSync } from "node:fs";
+import { createRequire } from "node:module";
 import { basename, extname, join, normalize, sep } from "node:path";
 import { pathToFileURL } from "node:url";
+
+const require = createRequire(import.meta.url);
+const updates = require("./updates.bundle.cjs");
 
 /**
  * Electron shell for the static export in `out/`.
@@ -115,6 +119,7 @@ function createWindow() {
       nodeIntegration: false,
       sandbox: true,
       spellcheck: false,
+      preload: join(app.getAppPath(), "electron", "preload.cjs"),
     },
   });
 
@@ -162,6 +167,7 @@ if (!gotLock) {
 
     registerProtocol();
     configureDownloads();
+    updates.registerUpdates();
     createWindow();
 
     app.on("activate", () => {

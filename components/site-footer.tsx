@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 
+import { UpdateCenter } from "@/components/updates/update-center";
 import { linkPrefetch } from "@/lib/runtime";
 
 export function SiteFooter() {
@@ -23,29 +24,32 @@ export function SiteFooter() {
             </div>
           </div>
 
-          <nav aria-label="Footer" className="flex flex-wrap gap-x-5 gap-y-2">
-            <Link
-              href="/#tools"
-              prefetch={linkPrefetch}
-              className="rounded text-sm text-ink-muted underline-offset-4 hover:text-ink hover:underline"
-            >
-              Tools
-            </Link>
-            <Link
-              href="/#status"
-              prefetch={linkPrefetch}
-              className="rounded text-sm text-ink-muted underline-offset-4 hover:text-ink hover:underline"
-            >
-              Build status
-            </Link>
-            <Link
-              href="/#privacy"
-              prefetch={linkPrefetch}
-              className="rounded text-sm text-ink-muted underline-offset-4 hover:text-ink hover:underline"
-            >
-              Privacy
-            </Link>
-          </nav>
+          <div className="flex flex-col gap-3 sm:items-end">
+            <nav aria-label="Footer" className="flex flex-wrap gap-x-5 gap-y-2">
+              <Link
+                href="/#tools"
+                prefetch={linkPrefetch}
+                className="rounded text-sm text-ink-muted underline-offset-4 hover:text-ink hover:underline"
+              >
+                Tools
+              </Link>
+              <Link
+                href="/#status"
+                prefetch={linkPrefetch}
+                className="rounded text-sm text-ink-muted underline-offset-4 hover:text-ink hover:underline"
+              >
+                Build status
+              </Link>
+              <Link
+                href="/#privacy"
+                prefetch={linkPrefetch}
+                className="rounded text-sm text-ink-muted underline-offset-4 hover:text-ink hover:underline"
+              >
+                Privacy
+              </Link>
+            </nav>
+            <UpdateCenter />
+          </div>
         </div>
 
         <p className="text-xs leading-relaxed text-ink-muted">

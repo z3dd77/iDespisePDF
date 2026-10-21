@@ -17,7 +17,14 @@ export const MAX_IMAGE_COUNT = 60;
 
 /** Rasterizing a whole document is the most memory-hungry operation. */
 export const MAX_RASTER_PAGES = 120;
-export const MAX_OUTPUT_PIXELS = 24_000_000;
+
+/**
+ * Canvas budgets. The area is kept at 16 MP because that is the practical
+ * ceiling outside desktop Chrome; the side limit catches long, thin pages that
+ * stay under the area cap but exceed a browser's maximum dimension.
+ */
+export const MAX_OUTPUT_PIXELS = 16_000_000;
+export const MAX_CANVAS_SIDE = 8192;
 
 /** Thumbnails stop at this count; selection still works past it. */
 export const MAX_THUMBNAIL_PAGES = 200;

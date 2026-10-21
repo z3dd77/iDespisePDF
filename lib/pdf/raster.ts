@@ -1,5 +1,6 @@
 import { PdfToolkitError } from "./errors";
 import {
+  MAX_CANVAS_SIDE,
   MAX_OUTPUT_PIXELS,
   MAX_THUMBNAIL_PAGES,
   THUMBNAIL_WIDTH,
@@ -85,7 +86,89 @@ export type RenderedPage = {
   /** Page size in PDF points, independent of the render scale. */
   widthPt: number;
   heightPt: number;
+  /** DPI actually used after fitting the canvas budgets. */
+  effectiveDpi: number;
+  /** True when the requested scale had to be reduced for this page. */
+  scaledDown: boolean;
 };
+
+/**
+ * Fits a requested scale inside the canvas area and side budgets.
+ *
+ * Pages that exceed a budget are rendered at a lower effective resolution
+ * instead of failing the whole job. That is what keeps very large pages from
+ * producing blank canvases on browsers with tighter limits than Chrome.
+ */
+export function clampRenderScale(
+  widthPt: number,
+  heightPt: number,
+  requestedScale: number,
+): number {
+  const width = Math.max(1, widthPt);
+  const height = Math.max(1, heightPt);
+  const areaScale = Math.sqrt(MAX_OUTPUT_PIXELS / (width * height));
+  const sideScale = MAX_CANVAS_SIDE / Math.max(width, height);
+
+  return Math.min(requestedScale, areaScale, sideScale);
+}
+
+let contentOperatorCodes: Set<number> | null = null;
+
+/**
+ * Text and image operators only. A page whose sole content is a white fill is
+ * a legitimate blank page, so paint operators are not enough to call a blank
+ * canvas a failed render.
+ */
+function getContentOperatorCodes(ops: PdfJsModule["OPS"]): Set<number> {
+  contentOperatorCodes ??= new Set([
+    ops.showText,
+    ops.showSpacedText,
+    ops.nextLineShowText,
+    ops.nextLineSetSpacingShowText,
+    ops.paintImageXObject,
+    ops.paintImageXObjectRepeat,
+    ops.paintXObject,
+    ops.paintInlineImageXObject,
+    ops.paintInlineImageXObjectGroup,
+    ops.paintImageMaskXObject,
+    ops.paintImageMaskXObjectRepeat,
+    ops.paintImageMaskXObjectGroup,
+  ]);
+
+  return contentOperatorCodes;
+}
+
+/**
+ * Cheap content probe: downscaling averages the page, so a single glyph or a
+ * thin line is still visible as a non-white pixel. A page that comes back pure
+ * white despite having paint operators is a failed render, not a blank page.
+ */
+function canvasHasContent(canvas: HTMLCanvasElement): boolean {
+  const probe = document.createElement("canvas");
+  probe.width = 64;
+  probe.height = 64;
+
+  const context = probe.getContext("2d", { willReadFrequently: true });
+
+  if (!context) {
+    return true;
+  }
+
+  context.fillStyle = "#ffffff";
+  context.fillRect(0, 0, probe.width, probe.height);
+  context.drawImage(canvas, 0, 0, probe.width, probe.height);
+
+  const { data } = context.getImageData(0, 0, probe.width, probe.height);
+  releaseCanvas(probe);
+
+  for (let index = 0; index < data.length; index += 4) {
+    if (data[index] < 250 || data[index + 1] < 250 || data[index + 2] < 250) {
+      return true;
+    }
+  }
+
+  return false;
+}
 
 export async function renderPageToCanvas(
   doc: PdfJsDocument,
@@ -95,15 +178,11 @@ export async function renderPageToCanvas(
   const page = await doc.getPage(pageNumber);
 
   try {
-    const viewport = page.getViewport({ scale });
-    const pixels = viewport.width * viewport.height;
-
-    if (pixels > MAX_OUTPUT_PIXELS) {
-      throw new PdfToolkitError(
-        "render-failed",
-        `page ${pageNumber} needs ${Math.round(pixels)} pixels`,
-      );
-    }
+    const baseViewport = page.getViewport({ scale: 1 });
+    const widthPt = baseViewport.width;
+    const heightPt = baseViewport.height;
+    const effectiveScale = clampRenderScale(widthPt, heightPt, scale);
+    const viewport = page.getViewport({ scale: effectiveScale });
 
     const canvas = document.createElement("canvas");
     canvas.width = Math.max(1, Math.floor(viewport.width));
@@ -118,12 +197,30 @@ export async function renderPageToCanvas(
     context.fillStyle = "#ffffff";
     context.fillRect(0, 0, canvas.width, canvas.height);
 
+    const operatorList = await page.getOperatorList().catch(() => null);
     await page.render({ canvas, viewport }).promise;
+
+    if (operatorList) {
+      const { OPS } = await loadPdfJs();
+      const contentCodes = getContentOperatorCodes(OPS);
+      const hasContent = operatorList.fnArray.some((code) =>
+        contentCodes.has(code),
+      );
+
+      if (hasContent && !canvasHasContent(canvas)) {
+        throw new PdfToolkitError(
+          "render-failed",
+          `page ${pageNumber} rendered blank`,
+        );
+      }
+    }
 
     return {
       canvas,
-      widthPt: viewport.width / scale,
-      heightPt: viewport.height / scale,
+      widthPt,
+      heightPt,
+      effectiveDpi: effectiveScale * 72,
+      scaledDown: effectiveScale < scale - 1e-9,
     };
   } finally {
     page.cleanup();

@@ -40,6 +40,9 @@ next-env.d.ts
 # generated from node_modules/pdfjs-dist by scripts/sync-pdf-assets.mjs
 /public/pdf.worker.min.mjs
 
+# bundled Electron updater (scripts/build-electron.mjs)
+/electron/updates.bundle.cjs
+
 # vercel
 .vercel
 

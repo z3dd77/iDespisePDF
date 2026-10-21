@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { isPdfToolkitError } from "@/lib/pdf/errors";
+import { MAX_CANVAS_SIDE, MAX_OUTPUT_PIXELS } from "@/lib/pdf/limits";
 import { pdfToImages } from "@/lib/pdf/pdf-to-images";
 import { protectPdf } from "@/lib/pdf/protect";
 import {
@@ -67,15 +68,24 @@ describe("PDF.js rendering", () => {
     expect(pageCount).toBe(1);
   });
 
-  it("refuses a render above the pixel budget", async () => {
+  it("scales a render down to the pixel budget instead of failing", async () => {
     const pdf = await makePdf([[200, 300]]);
     const { doc, destroy } = await openPdfDocument(pdf);
 
     try {
-      await expectPdfError(
-        () => renderPageToCanvas(doc, 1, 500),
-        "render-failed",
+      const rendered = await renderPageToCanvas(doc, 1, 500);
+
+      expect(rendered.scaledDown).toBe(true);
+      expect(rendered.canvas.width).toBeLessThanOrEqual(MAX_CANVAS_SIDE);
+      expect(rendered.canvas.height).toBeLessThanOrEqual(MAX_CANVAS_SIDE);
+      expect(rendered.canvas.width * rendered.canvas.height).toBeLessThanOrEqual(
+        MAX_OUTPUT_PIXELS,
       );
+      expect(rendered.effectiveDpi).toBeLessThan(500 * 72);
+      expect(rendered.widthPt).toBeCloseTo(200, 5);
+      expect(rendered.heightPt).toBeCloseTo(300, 5);
+
+      releaseCanvas(rendered.canvas);
     } finally {
       await destroy();
     }

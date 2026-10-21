@@ -2,6 +2,13 @@ appId: com.z3dd77.idespise
 productName: iDespisePDF
 copyright: Copyright © 2026 iDespisePDF
 
+# Generates app-update.yml and latest.yml. CI still owns publishing; the build
+# runs with --publish never and uploads the metadata with the installer.
+publish:
+  provider: github
+  owner: z3dd77
+  repo: iDespisePDF
+
 directories:
   output: release
   buildResources: resources

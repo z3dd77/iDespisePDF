@@ -87,6 +87,27 @@ export type CompressionOutcome =
       notes: readonly string[];
     };
 
+/** An input that produced no download in a batch run. */
+export type CompressionSkip = {
+  fileName: string;
+  reason: string;
+};
+
+/**
+ * A multi-file compression run. Only files that genuinely shrank produce
+ * outputs; every other input is reported in `skipped` with a reason.
+ */
+export type CompressionBatchOutcome = {
+  files: readonly ProcessedFile[];
+  notes: readonly string[];
+  skipped: readonly CompressionSkip[];
+  inputCount: number;
+  /** Inputs that were actually rebuilt, whether or not they shrank. */
+  processedCount: number;
+  /** Totals over the files that produced output; null when none did. */
+  comparison: { before: number; after: number } | null;
+};
+
 export type ProtectionPermissions = {
   printing: boolean;
   copying: boolean;
