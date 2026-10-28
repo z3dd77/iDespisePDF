@@ -1,3 +1,5 @@
+"use client";
+
 import {
   ArrowRight,
   CircleCheck,
@@ -6,7 +8,9 @@ import {
   ShieldCheck,
 } from "lucide-react";
 
+import { useState } from "react";
 import { DropZonePreview } from "@/components/drop-zone-preview";
+
 import { ToolCard } from "@/components/tool-card";
 import { AVAILABLE_TOOL_COUNT, TOOL_COUNT, TOOLS } from "@/lib/tools";
 
@@ -48,6 +52,30 @@ const STATS = [
 ];
 
 export default function HomePage() {
+  const [activeTab, setActiveTab] = useState("All");
+  const [search, setSearch] = useState("");
+  const TABS = ["All", "PDF", "Image", "Conversion"] as const;
+
+  const filteredTools = TOOLS.filter((tool) => {
+    const matchesTab =
+      activeTab === "All"
+        ? true
+        : activeTab === "PDF"
+        ? !["images-to-pdf", "pdf-to-images", "pdf-to-word", "pdf-to-excel", "word-to-pdf", "excel-to-pdf", "convert"].includes(tool.slug)
+        : activeTab === "Image"
+        ? ["images-to-pdf", "pdf-to-images"].includes(tool.slug)
+        : activeTab === "Conversion"
+        ? ["pdf-to-word", "pdf-to-excel", "word-to-pdf", "excel-to-pdf"].includes(tool.slug)
+        : false;
+
+    const lowerSearch = search.toLowerCase();
+    const matchesSearch =
+      tool.name.toLowerCase().includes(lowerSearch) ||
+      tool.summary.toLowerCase().includes(lowerSearch);
+
+    return matchesTab && matchesSearch;
+  });
+
   return (
     <>
       <section className="mx-auto grid w-full max-w-6xl gap-12 px-4 pb-16 pt-12 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-16 lg:px-8 lg:pb-24 lg:pt-20">
@@ -127,8 +155,34 @@ export default function HomePage() {
           </p>
         </div>
 
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4 mt-6">
+          <div className="flex gap-2">
+            {TABS.map((tab) => (
+              <button
+                key={tab}
+                type="button"
+                onClick={() => setActiveTab(tab)}
+                className={`rounded-full px-3 py-1 text-sm font-medium ${
+                  activeTab === tab
+                    ? "bg-accent-strong text-white"
+                    : "bg-surface text-ink-muted border border-white/70"
+                }`}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
+          <input
+            type="text"
+            placeholder="Search tools..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="rounded-full border border-white/70 bg-surface px-3 py-1 text-sm text-ink-muted focus:outline-none"
+          />
+        </div>
+
         <ul role="list" className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {TOOLS.map((tool) => (
+          {filteredTools.map((tool) => (
             <ToolCard key={tool.slug} tool={tool} />
           ))}
         </ul>

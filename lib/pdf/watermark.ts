@@ -67,29 +67,6 @@ export async function watermarkPdf(
     if (targetPages && !targetPages.has(pageNum)) continue;
     const page = doc.getPage(i);
     const { width, height } = page.getSize();
-    const textWidth = font.widthOfTextAtSize(options.text, options.fontSize);
-    const textHeight = options.fontSize; // approximate
-
-    // compute x for center placement
-    let x: number;
-    if (options.placement === "center") {
-      x = (width - textWidth) / 2;
-    } else {
-      const horiz = options.placement.split("-")[1];
-      if (horiz === "left") x = options.fontSize;
-      else if (horiz === "center") x = (width - textWidth) / 2;
-      else if (horiz === "right") x = width - textWidth - options.fontSize;
-      else x = options.fontSize;
-    }
-    // Compute y
-    let y: number;
-    if (options.placement === "center") {
-      y = (height - textHeight) / 2;
-    } else if (options.placement.startsWith("top")) {
-      y = height - options.fontSize - options.fontSize; // top margin
-    } else {
-      y = options.fontSize + textHeight; // bottom margin
-    }
 
     if (embeddedImage) {
       // Draw image watermark
@@ -143,6 +120,31 @@ export async function watermarkPdf(
         opacity: options.opacity,
       });
     } else {
+      // Compute text metrics and placement
+      const textWidth = font.widthOfTextAtSize(options.text, options.fontSize);
+      const textHeight = options.fontSize; // approximate
+      const { r, g, b } = parseHexColor(options.color);
+      // compute x for center placement
+      let x: number;
+      if (options.placement === "center") {
+        x = (width - textWidth) / 2;
+      } else {
+        const horiz = options.placement.split("-")[1];
+        if (horiz === "left") x = options.fontSize;
+        else if (horiz === "center") x = (width - textWidth) / 2;
+        else if (horiz === "right") x = width - textWidth - options.fontSize;
+        else x = options.fontSize;
+      }
+      // Compute y
+      let y: number;
+      if (options.placement === "center") {
+        y = (height - textHeight) / 2;
+      } else if (options.placement.startsWith("top")) {
+        y = height - options.fontSize - options.fontSize; // top margin
+      } else {
+        y = options.fontSize + textHeight; // bottom margin
+      }
+
       // Draw text watermark
       page.drawText(options.text, {
         x,
@@ -154,6 +156,7 @@ export async function watermarkPdf(
         opacity: options.opacity,
       });
     }
+
     onProgress?.({ completed: i + 1, total: pageCount });
   }
 

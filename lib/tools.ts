@@ -25,12 +25,12 @@ export type ToolSlug =
   | "protect"
   | "delete-pages"
   | "add-page-numbers"
-  | "watermark"
-  | "metadata"
-  | "annotate"
-  | "sign"
-  | "ocr"
-  | "unlock";
+  | "unlock"
+  | "compare"
+  | "pdf-to-word"
+  | "pdf-to-excel"
+  | "word-to-pdf"
+  | "excel-to-pdf";
 
 export type ToolDefinition = {
   slug: ToolSlug;
@@ -77,76 +77,6 @@ export const TOOLS: readonly ToolDefinition[] = [
       "Top or bottom placement with left/center/right alignment",
       "Custom start number and offset",
       "Multiple formatting styles (1, 1 of N, Page 1 of N)",
-    ],
-  },
-  {
-    slug: "watermark",
-    name: "Watermark PDF",
-    summary: "Add transparent text watermarks to PDFs.",
-    description:
-      "Apply a customizable text watermark (preset or custom) with opacity, rotation, size, colour and placement to all or selected pages.",
-    icon: Scissors,
-    status: "available",
-    capabilities: [
-      "Preset texts (DRAFT, CONFIDENTIAL, COPY) and custom text",
-      "Control opacity, rotation, colour, font size and placement",
-      "Apply to selected pages",
-    ],
-  },
-  {
-    slug: "metadata",
-    name: "PDF Metadata Editor",
-    summary: "View and edit standard PDF metadata fields.",
-    description:
-      "Inspect and modify title, author, subject, keywords and other metadata while leaving document content untouched.",
-    icon: Scissors,
-    status: "available",
-    capabilities: [
-      "Display current metadata values",
-      "Edit, clear or add fields",
-      "Preserve page order and content",
-    ],
-  },
-  {
-    slug: "annotate",
-    name: "Annotate PDF",
-    summary: "Add notes, highlights, shapes and freehand drawings.",
-    description:
-      "Create text notes, highlight rectangles, basic shapes and freehand strokes on selected pages with colour and size controls.",
-    icon: Scissors,
-    status: "available",
-    capabilities: [
-      "Text notes, highlights, rectangles, arrows, freehand drawing",
-      "Undo latest annotation, remove selected annotations",
-      "Accurate placement respecting page rotation and scaling",
-    ],
-  },
-  {
-    slug: "sign",
-    name: "Sign PDF",
-    summary: "Place a visual signature image or drawing on a PDF.",
-    description:
-      "Draw a signature, type a name, or import an image, then position and resize it on the chosen page before exporting.",
-    icon: Scissors,
-    status: "available",
-    capabilities: [
-      "Signature drawing canvas or image import",
-      "Adjust size, position and target page",
-      "Remove or edit before export",
-    ],
-  },
-  {
-    slug: "ocr",
-    name: "OCR PDF",
-    summary: "Perform optical character recognition on scanned PDFs.",
-    description:
-      "Run local OCR on image‑only pages to produce searchable text, with language options and progress feedback.",
-    icon: Scissors,
-    status: "available",
-    capabilities: [
-      "Local Tesseract.js OCR engine",
-      "Select pages and language packs",
-      "Output .txt and searchable PDF",
     ],
   },
   {
@@ -255,7 +185,7 @@ export const TOOLS: readonly ToolDefinition[] = [
     name: "Extract pages",
     summary: "Pull selected pages into a brand-new PDF.",
     description:
-      "Keep only the pages you need. The source file is never modified, and the new document contains exactly your selection.",
+      "Keep only the pages you need. The source is never modified, and the new document contains exactly your selection.",
     icon: FileOutput,
     status: "available",
     capabilities: [
@@ -312,8 +242,51 @@ export const TOOLS: readonly ToolDefinition[] = [
       "Verify the output requires the password",
     ],
   },
+  {
+    slug: "pdf-to-word",
+    name: "PDF to Word",
+    summary: "Convert a PDF into a Microsoft Word document.",
+    description: "Extract the text and layout from a PDF and produce a .docx file.",
+    icon: FileOutput,
+    status: "planned",
+    capabilities: [
+      "Convert PDF pages to editable Word format",
+    ],
+  },
+  {
+    slug: "pdf-to-excel",
+    name: "PDF to Excel",
+    summary: "Convert a PDF table into an Excel spreadsheet.",
+    description: "Parse tabular data from a PDF and generate a .xlsx file.",
+    icon: FileOutput,
+    status: "planned",
+    capabilities: [
+      "Extract tables from PDF and export as Excel",
+    ],
+  },
+  {
+    slug: "word-to-pdf",
+    name: "Word to PDF",
+    summary: "Convert a Word document into a PDF.",
+    description: "Take a .docx file and produce a PDF preserving layout.",
+    icon: FileOutput,
+    status: "planned",
+    capabilities: [
+      "Convert Word documents to PDF",
+    ],
+  },
+  {
+    slug: "excel-to-pdf",
+    name: "Excel to PDF",
+    summary: "Convert an Excel spreadsheet into a PDF.",
+    description: "Render an .xlsx file as a PDF document.",
+    icon: FileOutput,
+    status: "planned",
+    capabilities: [
+      "Convert Excel sheets to PDF",
+    ],
+  },
 ];
-
 export function getTool(slug: ToolSlug): ToolDefinition {
   const tool = TOOLS.find((candidate) => candidate.slug === slug);
 
@@ -323,9 +296,7 @@ export function getTool(slug: ToolSlug): ToolDefinition {
 
   return tool;
 }
-
 export const TOOL_COUNT = TOOLS.length;
-
 export const AVAILABLE_TOOL_COUNT = TOOLS.filter(
   (tool) => tool.status === "available",
 ).length;

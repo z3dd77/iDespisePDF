@@ -49,17 +49,35 @@ export async function loadPdf(
   let doc: PDFDocument;
 
   try {
+    // First try loading with the caller‑supplied password (if any).
     doc = await PDFDocument.load(bytes, {
       updateMetadata: false,
       password: options.password,
     });
   } catch (error) {
-    throw toPdfToolkitError(error);
+    const toolkitError = toPdfToolkitError(error);
+    // If the error is "encrypted" and the caller did not supply a password,
+    // attempt a second load with an explicit empty string password. pdf‑lib
+    // treats this as owner‑only encryption and will succeed for PDFs that open
+    // without a password.
+    if (toolkitError.code === "encrypted" && options.password === undefined) {
+      try {
+        doc = await PDFDocument.load(bytes, {
+          updateMetadata: false,
+          password: "",
+        });
+        // Successful load – continue as if the PDF were not protected.
+      } catch {
+        // Still fails – re‑throw the original encrypted error.
+        throw toolkitError;
+      }
+    } else {
+      // Any other error (or encrypted with a supplied password) is re‑thrown.
+      throw toolkitError;
+    }
   }
 
-  if (doc.isEncrypted && !options.password) {
-    throw new PdfToolkitError("encrypted");
-  }
+
 
   let pageCount: number;
 
