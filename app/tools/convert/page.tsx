@@ -4,7 +4,7 @@ import type { ToolDefinition } from "@/lib/tools";
 
 
 import { ToolPlaceholder } from "@/components/tool-placeholder";
-import { getTool } from "@/lib/tools";
+
 
 // The "convert" tool acts as a namespace for conversion sub‑tools.
 // It is not a real tool itself, so we mark it as planned.

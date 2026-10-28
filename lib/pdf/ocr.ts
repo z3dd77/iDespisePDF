@@ -1,8 +1,8 @@
 import { loadPdfJs } from "./raster";
-import { loadPdf } from "./read";
+
 import { stripExtension } from "./validate";
 import type { ProcessingResult, ProgressReporter } from "./types";
-import { PdfToolkitError } from "./errors";
+
 
 
 /** Perform OCR on selected pages and return plain text (and optionally a searchable PDF) */
@@ -43,6 +43,7 @@ const { data: { text } } = await Tesseract.recognize(canvas, lang);
     files: [
       {
         fileName: `${stripExtension(fileName)}-ocr.txt`,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         mimeType: "text/plain" as any,
         bytes: txtBytes,
         pageCount: targetSet ? targetSet.size : totalPages,

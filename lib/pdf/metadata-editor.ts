@@ -1,8 +1,8 @@
 import { loadPdf, savePdf } from "./read";
 import { stripExtension } from "./validate";
 import type { ProcessingResult, ProgressReporter } from "./types";
-import { PdfToolkitError } from "./errors";
-import { StandardFonts, rgb } from "@cantoo/pdf-lib";
+
+
 
 /**
  * Read and optionally edit PDF metadata.

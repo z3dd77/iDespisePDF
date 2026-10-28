@@ -15,8 +15,8 @@ import { ToolShell } from "@/components/tools/tool-shell";
 import { usePdfPreview } from "@/hooks/use-pdf-preview";
 import { useToolJob } from "@/hooks/use-tool-job";
 import { readPdfFiles, type IntakeFile } from "@/lib/files";
-import { isPdfToolkitError } from "@/lib/pdf/errors";
-import { formatPageRanges, parsePageRanges } from "@/lib/pdf/pages";
+
+
 import { deletePages } from "@/lib/pdf/delete-pages";
 import type { ProcessingResult } from "@/lib/pdf/types";
 import { getTool } from "@/lib/tools";
@@ -39,7 +39,9 @@ export function DeletePagesTool() {
       return;
     }
     // default to no pages selected (user must choose) – keep range text empty
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setSelected(new Set());
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setRangesText("");
   }, [file, preview.status, preview.pageCount]);
 

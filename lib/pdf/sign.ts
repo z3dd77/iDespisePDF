@@ -2,7 +2,7 @@ import { loadPdf, savePdf } from "./read";
 import { stripExtension } from "./validate";
 import type { ProcessingResult, ProgressReporter } from "./types";
 import { PdfToolkitError } from "./errors";
-import { StandardFonts, rgb } from "@cantoo/pdf-lib";
+
 
 /** Sign a PDF with an image (PNG/JPG) or drawn canvas data */
 export async function signPdf(

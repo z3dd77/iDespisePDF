@@ -1,7 +1,8 @@
-import { loadPdf, savePdf } from "./read";
+
 import { stripExtension } from "./validate";
 import type { ProcessingResult, ProgressReporter } from "./types";
 import { PdfToolkitError } from "./errors";
+import type { PDFDocument } from "@cantoo/pdf-lib";
 
 /** Unlock a password‑protected PDF (requires correct password). */
 export async function unlockPdf(
@@ -12,10 +13,10 @@ export async function unlockPdf(
 ): Promise<ProcessingResult> {
   // pdf-lib can load with password
   const { PDFDocument } = await import("@cantoo/pdf-lib");
-  let doc: any;
+  let doc: PDFDocument;
   try {
     doc = await PDFDocument.load(bytes, { password });
-  } catch (e:any) {
+  } catch (e) {
     throw new PdfToolkitError("wrong-password", "Password is incorrect or PDF is not encrypted");
   }
   // Re‑save without encryption

@@ -3,7 +3,7 @@ import { stripExtension } from "./validate";
 import type { ProcessingResult, ProgressReporter } from "./types";
 import { PdfToolkitError } from "./errors";
 import { StandardFonts, rgb } from "@cantoo/pdf-lib";
-import { normalizeSelection } from "./pages";
+
 
 /**
  * Add visible page numbers to a PDF.

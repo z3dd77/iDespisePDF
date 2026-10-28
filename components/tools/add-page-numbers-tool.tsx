@@ -14,7 +14,7 @@ import { ToolShell } from "@/components/tools/tool-shell";
 import { usePdfPreview } from "@/hooks/use-pdf-preview";
 import { useToolJob } from "@/hooks/use-tool-job";
 import { readPdfFiles, type IntakeFile } from "@/lib/files";
-import { isPdfToolkitError } from "@/lib/pdf/errors";
+
 import { addPageNumbers } from "@/lib/pdf/add-page-numbers";
 import type { ProcessingResult } from "@/lib/pdf/types";
 import { getTool } from "@/lib/tools";
@@ -49,7 +49,7 @@ const PLACEMENT_OPTIONS = [
 export function AddPageNumbersTool() {
   const [file, setFile] = useState<IntakeFile | null>(null);
   const [errors, setErrors] = useState<string[]>([]);
-  const [rangeError, setRangeError] = useState<string | null>(null);
+
 
   const [selected, setSelected] = useState<Set<number>>(new Set());
   const [rangesText, setRangesText] = useState("");
@@ -69,7 +69,9 @@ export function AddPageNumbersTool() {
   // initialise selection once preview ready
   useEffect(() => {
     if (!file || preview.status !== "ready") return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setSelected(new Set());
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setRangesText("");
   }, [file, preview.status, preview.pageCount]);
 
@@ -79,18 +81,18 @@ export function AddPageNumbersTool() {
     setErrors(result.errors);
     if (result.accepted[0]) {
       setFile(result.accepted[0]);
-      setRangeError(null);
+
     }
   }
 
   async function runAddNumbers() {
     if (!file || !file.bytes || preview.status !== "ready") return;
     if (selected.size === 0) {
-      setRangeError("Select at least one page to number.");
+
       return;
     }
-    setRangeError(null);
-    const pages = Array.from(selected);
+
+
     const opts = {
       format,
       placement,
