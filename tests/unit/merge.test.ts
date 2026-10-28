@@ -77,4 +77,13 @@ describe("mergePdfs", () => {
       "encrypted",
     );
   });
+  it('handles many PDFs without false encryption error', async () => {
+    const inputs = [];
+    for (let i = 0; i < 20; i++) {
+      const bytes = await makePdf([[100 + i, 100 + i]]);
+      inputs.push({ name: `file${i}.pdf`, bytes });
+    }
+    const result = await mergePdfs(inputs);
+    expect(result.files[0].pageCount).toBe(20);
+  });
 });
