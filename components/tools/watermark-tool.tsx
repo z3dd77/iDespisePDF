@@ -91,7 +91,7 @@ export function WatermarkTool() {
       canvasRef.current!.width = baseImg.width;
       canvasRef.current!.height = baseImg.height;
       ctx.clearRect(0, 0, baseImg.width, baseImg.height);
-      ctx.drawImage(baseImg, 0, 0);
+      
 
       if (mode === "text") {
         ctx.globalAlpha = opacity;
@@ -370,9 +370,10 @@ export function WatermarkTool() {
           {/* Preview canvas */}
           {preview.status === "ready" && preview.thumbnails[0] && (
               <div className="mt-4 flex justify-center">
-                <div className="relative" style={{ width: "800px", maxWidth: "100%" }}>
+                <div className="relative" style={{ width: "400px", maxWidth: "100%" }}>
                   {/* Base image is drawn onto the canvas; the img element is removed to avoid blurred background */}
-                  <canvas ref={canvasRef} className="block w-full h-auto" />
+                  <img src={preview.thumbnails[0]} alt="Preview" className="block w-full h-auto" style={{ imageRendering: "pixelated" }} />
+<canvas ref={canvasRef} className="absolute inset-0 pointer-events-none" />
                 </div>
               </div>
           )}
