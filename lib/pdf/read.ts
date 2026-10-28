@@ -22,7 +22,7 @@ export function toPdfToolkitError(error: unknown): PdfToolkitError {
   const name = error instanceof Error ? error.name : "";
   const message = error instanceof Error ? error.message : String(error);
 
-  if (/encrypted\s+pdf/i.test(message) || /pdf\s+is\s+encrypted/i.test(message) || name === "EncryptedPdfError") {
+  if (/is encrypted/i.test(message) || /encrypted\s+pdf/i.test(message) || /pdf\s+is\s+encrypted/i.test(message) || name === "EncryptedPdfError") {
     return new PdfToolkitError("encrypted", "library reported encryption");
   }
 
