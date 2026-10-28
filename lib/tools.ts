@@ -22,7 +22,20 @@ export type ToolSlug =
   | "extract-pages"
   | "images-to-pdf"
   | "pdf-to-images"
-  | "protect";
+  | "protect"
+  | "delete-pages"
+  | "add-page-numbers"
+  | "watermark"
+  | "crop"
+  | "metadata"
+  | "annotate"
+  | "sign"
+  | "pdf-to-text"
+  | "extract-images"
+  | "ocr"
+  | "compare"
+  | "unlock"
+  | "nup";
 
 export type ToolDefinition = {
   slug: ToolSlug;
@@ -43,6 +56,187 @@ export const STATUS_LABEL: Record<ToolStatus, string> = {
 };
 
 export const TOOLS: readonly ToolDefinition[] = [
+  {
+    slug: "delete-pages",
+    name: "Delete PDF Pages",
+    summary: "Remove selected pages from a PDF.",
+    description:
+      "Choose pages to delete and produce a new PDF that preserves the original page order for the remaining pages.",
+    icon: Scissors,
+    status: "available",
+    capabilities: [
+      "Select pages via thumbnails or range input",
+      "Prevent deletion of all pages",
+      "Generate a new PDF without modifying the source",
+    ],
+  },
+  {
+    slug: "add-page-numbers",
+    name: "Add Page Numbers",
+    summary: "Overlay page numbers onto PDF pages.",
+    description:
+      "Configure number format, position, font size, colour and offset, then add visible page numbers to the document.",
+    icon: Scissors,
+    status: "available",
+    capabilities: [
+      "Top or bottom placement with left/center/right alignment",
+      "Custom start number and offset",
+      "Multiple formatting styles (1, 1 of N, Page 1 of N)",
+    ],
+  },
+  {
+    slug: "watermark",
+    name: "Watermark PDF",
+    summary: "Add transparent text watermarks to PDFs.",
+    description:
+      "Apply a customizable text watermark (preset or custom) with opacity, rotation, size, colour and placement to all or selected pages.",
+    icon: Scissors,
+    status: "available",
+    capabilities: [
+      "Preset texts (DRAFT, CONFIDENTIAL, COPY) and custom text",
+      "Control opacity, rotation, colour, font size and placement",
+      "Apply to selected pages",
+    ],
+  },
+  {
+    slug: "crop",
+    name: "Crop PDF",
+    summary: "Adjust visible page boundaries.",
+    description:
+      "Define crop boxes via margins or draggable rectangle for selected pages, changing the visible area without deleting underlying content.",
+    icon: Scissors,
+    status: "available",
+    capabilities: [
+      "Set uniform margins or custom rectangle per page",
+      "Preview crop area before applying",
+      "Supports mixed page sizes and rotations",
+    ],
+  },
+  {
+    slug: "metadata",
+    name: "PDF Metadata Editor",
+    summary: "View and edit standard PDF metadata fields.",
+    description:
+      "Inspect and modify title, author, subject, keywords and other metadata while leaving document content untouched.",
+    icon: Scissors,
+    status: "available",
+    capabilities: [
+      "Display current metadata values",
+      "Edit, clear or add fields",
+      "Preserve page order and content",
+    ],
+  },
+  {
+    slug: "annotate",
+    name: "Annotate PDF",
+    summary: "Add notes, highlights, shapes and freehand drawings.",
+    description:
+      "Create text notes, highlight rectangles, basic shapes and freehand strokes on selected pages with colour and size controls.",
+    icon: Scissors,
+    status: "available",
+    capabilities: [
+      "Text notes, highlights, rectangles, arrows, freehand drawing",
+      "Undo latest annotation, remove selected annotations",
+      "Accurate placement respecting page rotation and scaling",
+    ],
+  },
+  {
+    slug: "sign",
+    name: "Sign PDF",
+    summary: "Place a visual signature image or drawing on a PDF.",
+    description:
+      "Draw a signature, type a name, or import an image, then position and resize it on the chosen page before exporting.",
+    icon: Scissors,
+    status: "available",
+    capabilities: [
+      "Signature drawing canvas or image import",
+      "Adjust size, position and target page",
+      "Remove or edit before export",
+    ],
+  },
+  {
+    slug: "pdf-to-text",
+    name: "PDF to Text",
+    summary: "Extract selectable text from a PDF.",
+    description:
+      "Retrieve all extractable text from the document, preserving page order with clear separators.",
+    icon: Scissors,
+    status: "available",
+    capabilities: [
+      "Extract text from any page range",
+      "Provide preview and downloadable .txt file",
+    ],
+  },
+  {
+    slug: "extract-images",
+    name: "Extract Images from PDF",
+    summary: "Extract embedded image resources as separate files.",
+    description:
+      "Locate and export original images embedded in the PDF, preserving format and allowing individual or ZIP download.",
+    icon: Scissors,
+    status: "available",
+    capabilities: [
+      "Detect JPEG, PNG and other image XObjects",
+      "Show previews and dimensions",
+      "Download individually or as ZIP",
+    ],
+  },
+  {
+    slug: "ocr",
+    name: "OCR PDF",
+    summary: "Perform optical character recognition on scanned PDFs.",
+    description:
+      "Run local OCR on image‑only pages to produce searchable text, with language options and progress feedback.",
+    icon: Scissors,
+    status: "available",
+    capabilities: [
+      "Local Tesseract.js OCR engine",
+      "Select pages and language packs",
+      "Output .txt and searchable PDF",
+    ],
+  },
+  {
+    slug: "compare",
+    name: "Compare PDFs",
+    summary: "Show visual and textual differences between two PDFs.",
+    description:
+      "Compare page counts, extracted text diffs and visual side‑by‑side previews to highlight added, removed or changed pages.",
+    icon: Scissors,
+    status: "available",
+    capabilities: [
+      "Detect page insertions, deletions, reorderings",
+      "Text diff per page",
+      "Visual side‑by‑side thumbnail comparison",
+    ],
+  },
+  {
+    slug: "unlock",
+    name: "Unlock PDF",
+    summary: "Remove password protection from a PDF when the password is known.",
+    description:
+      "Enter the open password, decrypt the PDF locally, and output an unencrypted copy.",
+    icon: Scissors,
+    status: "available",
+    capabilities: [
+      "Prompt for password securely",
+      "Validate password and report errors",
+      "Produce an unprotected PDF",
+    ],
+  },
+  {
+    slug: "nup",
+    name: "Pages per Sheet (N‑up)",
+    summary: "Place multiple source pages onto a single output page.",
+    description:
+      "Choose layouts (2, 4, 6, 9 pages per sheet) and generate a new PDF that composites source pages onto larger pages.",
+    icon: Scissors,
+    status: "available",
+    capabilities: [
+      "Various N‑up layouts with margins",
+      "Preserve source order and scaling",
+    ],
+  },
+
   {
     slug: "merge",
     name: "Merge PDFs",
