@@ -1,6 +1,6 @@
 {
   "name": "idespise-pdf",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "private": true,
   "description": "Local-first PDF utilities. Files are processed in your browser and never uploaded.",
   "author": "z3dd77",
