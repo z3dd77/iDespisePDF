@@ -91,7 +91,7 @@ export function WatermarkTool() {
       canvasRef.current!.width = baseImg.width;
       canvasRef.current!.height = baseImg.height;
       ctx.clearRect(0, 0, baseImg.width, baseImg.height);
-      
+      ctx.drawImage(baseImg, 0, 0);
 
       if (mode === "text") {
         ctx.globalAlpha = opacity;
@@ -214,8 +214,9 @@ export function WatermarkTool() {
       <ErrorList messages={errors} />
 
       {file && (
-        <>
-          {/* Mode selector */}
+        <div className="flex flex-col md:flex-row gap-4">
+          <div className="md:sticky md:top-4 md:w-96 flex-1">
+            {/* Mode selector */}
           <OptionGroup
             legend="Watermark type"
             name="wm-type"
@@ -367,16 +368,7 @@ export function WatermarkTool() {
             disabled={job.isWorking}
           />
 
-          {/* Preview canvas */}
-          {preview.status === "ready" && preview.thumbnails[0] && (
-              <div className="mt-4 flex justify-center">
-                <div className="relative" style={{ width: "400px", maxWidth: "100%" }}>
-                  {/* Base image is drawn onto the canvas; the img element is removed to avoid blurred background */}
-                  <img src={preview.thumbnails[0]} alt="Preview" className="block w-full h-auto" style={{ imageRendering: "pixelated" }} />
-<canvas ref={canvasRef} className="absolute inset-0 pointer-events-none" />
-                </div>
-              </div>
-          )}
+
 
           <div className="flex flex-wrap items-center gap-3 mt-4">
             <button
@@ -389,8 +381,18 @@ export function WatermarkTool() {
               {job.isWorking ? "Watermarking…" : "Add Watermark"}
             </button>
           </div>
-        </>
-      )}
+        </div> {/* end left column */}
+        <div className="flex-1 flex justify-center">
+          {preview.status === "ready" && preview.thumbnails[0] && (
+            <div className="mt-4 flex justify-center">
+              <div className="relative" style={{ width: "400px", maxWidth: "100%" }}>
+                <canvas ref={canvasRef} className="block w-full h-auto" style={{ imageRendering: "pixelated" }} />
+              </div>
+            </div>
+          )}
+        </div>
+      </div> {/* end outer flex */}
+    )}
 
       {job.state.status === "working" && (
         <ProgressPanel label="Applying watermark" progress={job.state.progress} />
