@@ -1,8 +1,6 @@
 name: Create Release
 
-permissions:
-  contents: write
-  releases: write
+permissions: write-all
 
 on:
   push:
