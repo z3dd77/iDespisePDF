@@ -95,7 +95,7 @@ export async function watermarkPdf(
       // Draw image watermark
       const imgWidth = embeddedImage.width;
       const imgHeight = embeddedImage.height;
-      const scale = options.imageScale ?? 1;
+      const scale = Math.max(0.01, options.imageScale ?? 1);
       const drawWidth = imgWidth * scale;
       const drawHeight = imgHeight * scale;
       // Compute placement for image

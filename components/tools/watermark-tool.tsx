@@ -66,15 +66,17 @@ export function WatermarkTool() {
   async function runWatermark() {
     if (!file?.bytes) return;
     const opts: any = {
-      text,
       opacity,
       rotation,
-      fontSize,
-      color,
-      placement, imageScale,
+      placement,
     };
-    if (mode === "image" && imageFile?.bytes) {
+    if (mode === "text") {
+      opts.text = text;
+      opts.fontSize = fontSize;
+      opts.color = color;
+    } else if (mode === "image" && imageFile?.bytes) {
       opts.imageBytes = imageFile.bytes;
+      opts.imageScale = imageScale;
     }
     await job.run((r) => watermarkPdf(file.bytes, opts, file.name, r));
   }
@@ -282,8 +284,9 @@ export function WatermarkTool() {
                 <span className="text-sm font-medium text-ink">Scale (1 = 100%)</span>
                 <input
                   type="number"
-                  min={0.1}
-                  step={0.1}
+                  min={0.01}
+                  step={0.01}
+                  max={5}
                   value={imageScale}
                   onChange={(e) => setImageScale(Number(e.target.value))}
                   disabled={job.isWorking}
