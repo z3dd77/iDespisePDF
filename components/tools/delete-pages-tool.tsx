@@ -15,6 +15,7 @@ import { ToolShell } from "@/components/tools/tool-shell";
 import { usePdfPreview } from "@/hooks/use-pdf-preview";
 import { useToolJob } from "@/hooks/use-tool-job";
 import { readPdfFiles, type IntakeFile } from "@/lib/files";
+import { deletePages } from "@/lib/pdf/delete-pages";
 
 
 import { formatPageRanges } from "@/lib/pdf/pages";
