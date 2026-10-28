@@ -12,6 +12,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: npm ci
+      - name: Build Windows installer
+        run: npm run dist:win
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
@@ -19,3 +23,4 @@ jobs:
           name: ${{ github.ref_name }}
           body: |
             Lint clean‑up and owner‑only encryption support.
+          files: release/*
