@@ -222,7 +222,7 @@ export function WatermarkTool() {
           />
 
           {/* Text fields – disabled when image mode */}
-          <div className="grid grid-cols-2 gap-4 mt-4">
+          <div className="grid grid-cols-2 gap-4 mt-4" hidden={mode !== "text"}>
             <label className="block">
               <span className="text-sm font-medium text-ink">Watermark text</span>
               <input
@@ -279,7 +279,30 @@ export function WatermarkTool() {
             </label>
           </div>
           {mode === "image" && (
-            <div className="mt-2">
+             <div className="mt-2">
+               <label className="block">
+                 <span className="text-sm font-medium text-ink">Opacity (0‑1)</span>
+                 <input
+                   type="number"
+                   min={0}
+                   max={1}
+                   step={0.1}
+                   value={opacity}
+                   onChange={(e) => setOpacity(Number(e.target.value))}
+                   disabled={job.isWorking}
+                   className="mt-1 w-full rounded-control border border-line/70 bg-sunken px-2 py-1.5 text-sm"
+                 />
+               </label>
+               <label className="block">
+                 <span className="text-sm font-medium text-ink">Rotation (°)</span>
+                 <input
+                   type="number"
+                   value={rotation}
+                   onChange={(e) => setRotation(Number(e.target.value))}
+                   disabled={job.isWorking}
+                   className="mt-1 w-full rounded-control border border-line/70 bg-sunken px-2 py-1.5 text-sm"
+                 />
+               </label>
               <label className="block">
                 <span className="text-sm font-medium text-ink">Scale (1 = 100%)</span>
                 <input
