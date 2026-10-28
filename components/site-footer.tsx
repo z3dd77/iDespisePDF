@@ -53,7 +53,7 @@ export function SiteFooter() {
         </div>
 
         <p className="text-xs leading-relaxed text-ink-muted">
-          All nine tools run in your browser: merge, split, compress, rotate,
+          All tools run in your browser: merge, split, compress, rotate,
           reorder, extract, images to PDF, PDF to images, and AES-256 password
           protection. Compression re-renders pages as images and says so before
           you run it. iDespisePDF is an independent project and is not

@@ -4,7 +4,7 @@ Local-first PDF utilities. Files are opened, processed, and downloaded on your
 own device. There is no upload endpoint, no account, and no server-side document
 storage. The same web build also ships as a Windows desktop app (Electron).
 
-**Status: all nine tools are implemented.** The desktop app wraps the same
+**Status: all tools are implemented.** The desktop app wraps the same
 static export. Each tool has its own page, its own stated limits, and real
 processing behind it. Compression and protection are the two tools with quality
 or security caveats, and both state those caveats in the UI before they run.
@@ -151,7 +151,7 @@ the batch continues.
 - Route smoke tests confirm each page returns HTML and that the landing page
   does not load PDF.js or the PDF engine in its initial client bundle. HTTP 200
   is not treated as proof that an interactive flow was exercised.
-- `scripts/ui-smoke.mjs` drives all nine tools in Chromium: it uploads real
+- `scripts/ui-smoke.mjs` drives all tools in Chromium: it uploads real
   files, clicks the real buttons, downloads the output, and parses it back. It
   requires `npm start`, a Chromium install, and also confirms that the browser
   build exposes no desktop update control.

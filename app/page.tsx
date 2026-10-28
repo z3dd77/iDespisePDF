@@ -15,7 +15,7 @@ import { ToolCard } from "@/components/tool-card";
 import { AVAILABLE_TOOL_COUNT, TOOL_COUNT, TOOLS } from "@/lib/tools";
 
 const IMPLEMENTED = [
-  "All nine tools: merge, split, compress, rotate, reorder, extract pages, images to PDF, PDF to images, and protect",
+  `All ${AVAILABLE_TOOL_COUNT} tools available: merge, split, compress, rotate, reorder, extract pages, images to PDF, PDF to images, protect, delete pages, add page numbers, compare, and unlock`,
   "Shared intake, validation, progress, result, and download components",
   "Unit tests for page arithmetic, PDF transforms, encryption, and compression decisions",
   "Browser tests for PDF.js rendering and independent encryption verification",
@@ -23,11 +23,10 @@ const IMPLEMENTED = [
 ];
 
 const DEFERRED = [
-  "Lossless compression. Current compression re-renders pages as images and discloses the tradeoff before running",
-  "Opening or removing the password from an already-protected PDF",
-  "OCR, digital signatures, PDF/A conversion, and form editing",
-  "ZIP bundling. Multi-file results download one file at a time",
-  "HEIC, TIFF, WebP, and SVG image input",
+  "PDF to Word conversion",
+  "PDF to Excel conversion",
+  "Word to PDF conversion",
+  "Excel to PDF conversion",
 ];
 
 const PRIVACY_POINTS = [
@@ -144,7 +143,7 @@ export default function HomePage() {
               The tools
             </h2>
             <p className="mt-3 max-w-2xl text-sm leading-relaxed text-ink-muted">
-              Nine tools, each with its own page and its own stated limits.
+              {AVAILABLE_TOOL_COUNT} of {TOOL_COUNT} available tools.
               Everything runs in this tab: choose a file, process it, download
               the result. Compression and protection describe their tradeoffs
               before you run them.
