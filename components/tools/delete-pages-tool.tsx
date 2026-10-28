@@ -17,7 +17,7 @@ import { useToolJob } from "@/hooks/use-tool-job";
 import { readPdfFiles, type IntakeFile } from "@/lib/files";
 
 
-import { deletePages } from "@/lib/pdf/delete-pages";
+import { formatPageRanges } from "@/lib/pdf/pages";
 import type { ProcessingResult } from "@/lib/pdf/types";
 import { getTool } from "@/lib/tools";
 
