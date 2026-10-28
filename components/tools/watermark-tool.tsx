@@ -132,7 +132,14 @@ export function WatermarkTool() {
           }
           ctx.restore();
         } else {
-          ctx.fillText(text, x, y);
+          if (placement === "center") {
+              ctx.save();
+              ctx.translate(baseImg.width / 2, baseImg.height / 2);
+              ctx.fillText(text, -txtW / 2, txtH / 2);
+              ctx.restore();
+            } else {
+              ctx.fillText(text, x, y);
+            }
         }
       } else if (mode === "image" && imageFile?.bytes) {
         const blob = new Blob([new Uint8Array(imageFile.bytes)], {
@@ -362,12 +369,12 @@ export function WatermarkTool() {
 
           {/* Preview canvas */}
           {preview.status === "ready" && preview.thumbnails[0] && (
-            <div className="mt-4">
-              <div className="relative inline-block">
-                <img src={preview.thumbnails[0]} alt="Preview" className="block" />
-                <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none" />
+              <div className="mt-4 flex justify-center">
+                <div className="relative" style={{ width: "800px", maxWidth: "100%" }}>
+                  {/* Base image is drawn onto the canvas; the img element is removed to avoid blurred background */}
+                  <canvas ref={canvasRef} className="block w-full h-auto" />
+                </div>
               </div>
-            </div>
           )}
 
           <div className="flex flex-wrap items-center gap-3 mt-4">
