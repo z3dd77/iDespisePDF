@@ -30,13 +30,13 @@ export * from "./pdf-to-images";
 export * from "./protect";
 export * from "./add-page-numbers";
 export * from "./watermark";
-export * from "./crop";
+
 export * from "./metadata-editor";
 export * from "./annotate";
 export * from "./sign";
-export * from "./pdf-to-text";
-export * from "./extract-images";
+
+
 export * from "./ocr";
-export * from "./compare";
+
 export * from "./unlock";
-export * from "./nup";
+

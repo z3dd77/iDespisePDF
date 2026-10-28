@@ -26,16 +26,11 @@ export type ToolSlug =
   | "delete-pages"
   | "add-page-numbers"
   | "watermark"
-  | "crop"
   | "metadata"
   | "annotate"
   | "sign"
-  | "pdf-to-text"
-  | "extract-images"
   | "ocr"
-  | "compare"
-  | "unlock"
-  | "nup";
+  | "unlock";
 
 export type ToolDefinition = {
   slug: ToolSlug;
@@ -99,20 +94,6 @@ export const TOOLS: readonly ToolDefinition[] = [
     ],
   },
   {
-    slug: "crop",
-    name: "Crop PDF",
-    summary: "Adjust visible page boundaries.",
-    description:
-      "Define crop boxes via margins or draggable rectangle for selected pages, changing the visible area without deleting underlying content.",
-    icon: Scissors,
-    status: "available",
-    capabilities: [
-      "Set uniform margins or custom rectangle per page",
-      "Preview crop area before applying",
-      "Supports mixed page sizes and rotations",
-    ],
-  },
-  {
     slug: "metadata",
     name: "PDF Metadata Editor",
     summary: "View and edit standard PDF metadata fields.",
@@ -155,33 +136,6 @@ export const TOOLS: readonly ToolDefinition[] = [
     ],
   },
   {
-    slug: "pdf-to-text",
-    name: "PDF to Text",
-    summary: "Extract selectable text from a PDF.",
-    description:
-      "Retrieve all extractable text from the document, preserving page order with clear separators.",
-    icon: Scissors,
-    status: "available",
-    capabilities: [
-      "Extract text from any page range",
-      "Provide preview and downloadable .txt file",
-    ],
-  },
-  {
-    slug: "extract-images",
-    name: "Extract Images from PDF",
-    summary: "Extract embedded image resources as separate files.",
-    description:
-      "Locate and export original images embedded in the PDF, preserving format and allowing individual or ZIP download.",
-    icon: Scissors,
-    status: "available",
-    capabilities: [
-      "Detect JPEG, PNG and other image XObjects",
-      "Show previews and dimensions",
-      "Download individually or as ZIP",
-    ],
-  },
-  {
     slug: "ocr",
     name: "OCR PDF",
     summary: "Perform optical character recognition on scanned PDFs.",
@@ -221,19 +175,6 @@ export const TOOLS: readonly ToolDefinition[] = [
       "Prompt for password securely",
       "Validate password and report errors",
       "Produce an unprotected PDF",
-    ],
-  },
-  {
-    slug: "nup",
-    name: "Pages per Sheet (N‑up)",
-    summary: "Place multiple source pages onto a single output page.",
-    description:
-      "Choose layouts (2, 4, 6, 9 pages per sheet) and generate a new PDF that composites source pages onto larger pages.",
-    icon: Scissors,
-    status: "available",
-    capabilities: [
-      "Various N‑up layouts with margins",
-      "Preserve source order and scaling",
     ],
   },
 
